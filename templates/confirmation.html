@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Booking Confirmation</h1>
+        <div class="alert alert-success" role="alert">
+            Your flight has been booked successfully!
+        </div>
+        <div>
+            <p><strong>Flight ID:</strong> {{ ticket.flight_id }}</p>
+            <p><strong>Seat Number:</strong> {{ ticket.seat_number }}</p>
+            <p><strong>Class:</strong> {{ ticket.class }}</p>
+            <p><strong>Price:</strong> ₹{{ ticket.price }}</p>
+            <p><strong>Booking Date:</strong> {{ ticket.booking_date }}</p>
+            <p><strong>Payment Status:</strong> {{ ticket.payment_status }}</p>
+        </div>
+        <a href="/" class="btn btn-primary">Book Another Flight</a>
+    </div>
+</body>
+</html>

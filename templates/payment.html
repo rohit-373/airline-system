@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Payment</h1>
+        <form action="/confirmation" method="post">
+            <div class="form-group">
+                <label for="payment_method">Payment Method</label>
+                <select id="payment_method" name="payment_method" class="form-control">
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="Debit Card">Debit Card</option>
+                    <option value="Net Banking">Net Banking</option>
+                    <option value="Wallet">Wallet</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="payment_status">Payment Status</label>
+                <select id="payment_status" name="payment_status" class="form-control">
+                    <option value="Pay Now">Pay Now</option>
+                    <option value="Pay Later">Pay Later</option>
+                </select>
+            </div>
+            <input type="hidden" name="flight_id" value="{{ flight_id }}">
+            <input type="hidden" name="seat_number" value="{{ seat_number }}">
+            <input type="hidden" name="class" value="{{ class }}">
+            <input type="hidden" name="price" value="{{ price }}">
+            <input type="hidden" name="booking_date" value="{{ booking_date }}">
+            <input type="hidden" name="passenger_id" value="{{ passenger_id }}">
+            <button type="submit" class="btn btn-success">Confirm Booking</button>
+        </form>
+    </div>
+</body>
+</html>

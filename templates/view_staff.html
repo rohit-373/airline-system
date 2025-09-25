@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Staff</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Staff Details</h1>
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Staff ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Email</th>
+                    <th>Airplane ID</th>
+                    <th>Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in staff %}
+                <tr>
+                    <td>{{ member['Staff_ID'] }}</td>
+                    <td>{{ member['Name'] }}</td>
+                    <td>{{ member['Role'] }}</td>
+                    <td>{{ member['Email'] }}</td>
+                    <td>{{ member['Airplane_ID'] }}</td>
+                    <td>{{ member['Hours'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <a href="/staff" class="btn btn-secondary">Back to Staff Menu</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Registration</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        .form-group { margin-bottom: 1em; }
+        label { display: block; margin-bottom: 0.5em; }
+        input, select { width: 100%; padding: 0.5em; box-sizing: border-box; }
+        #phone-numbers-container .input-group { display: flex; margin-bottom: 0.5em; }
+        #phone-numbers-container input { flex-grow: 1; }
+        button { padding: 0.7em 1.5em; cursor: pointer; border: 1px solid #ccc; background-color: #f0f0f0; }
+        .submit-btn { background-color: #4CAF50; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h1>Passenger Registration</h1>
+    <form action="/register" method="post">
+        <div class="form-group">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
+        <div class="form-group">
+            <label for="middle_name">Middle Name</label>
+            <input type="text" id="middle_name" name="middle_name">
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" required>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label>Phone Numbers</label>
+            <div id="phone-numbers-container">
+                <div class="input-group">
+                    <input type="tel" name="phone_numbers[]" required>
+                </div>
+            </div>
+            <button type="button" onclick="addPhoneNumber()">Add Another Phone Number</button>
+        </div>
+        <button type="submit" class="submit-btn">Register</button>
+    </form>
+
+    <script>
+        function addPhoneNumber() {
+            const container = document.getElementById('phone-numbers-container');
+            const newPhoneInput = document.createElement('div');
+            newPhoneInput.classList.add('input-group');
+            newPhoneInput.innerHTML = '<input type="tel" name="phone_numbers[]" required>';
+            container.appendChild(newPhoneInput);
+        }
+    </script>
+</body>
+</html>

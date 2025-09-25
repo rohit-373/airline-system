@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Flight</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1>Book a Flight</h1>
+        </div>
+        <form action="/flights" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="start_location">From</label>
+                    <select id="start_location" name="start_location" class="form-control" required>
+                        <option value="" disabled selected>Start</option>
+                        {% for location in locations %}
+                            <option>{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="destination_location">To</label>
+                    <select id="destination_location" name="destination_location" class="form-control" required>
+                        <option value="" disabled selected>End</option>
+                        {% for location in locations %}
+                            <option>{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="booking_date">Booking Date</label>
+                <input type="date" id="booking_date" name="booking_date" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Find Flights</button>
+        </form>
+    </div>
+
+    <script>
+        const startLocation = document.getElementById('start_location');
+        const destinationLocation = document.getElementById('destination_location');
+
+        function updateDestinationOptions() {
+            const selectedStart = startLocation.value;
+            for (let option of destinationLocation.options) {
+                if (option.value === selectedStart) {
+                    option.style.display = 'none';
+                } else {
+                    option.style.display = 'block';
+                }
+            }
+        }
+
+        function updateStartOptions() {
+            const selectedDestination = destinationLocation.value;
+            for (let option of startLocation.options) {
+                if (option.value === selectedDestination) {
+                    option.style.display = 'none';
+                } else {
+                    option.style.display = 'block';
+                }
+            }
+        }
+
+        startLocation.addEventListener('change', () => {
+            if (destinationLocation.value === startLocation.value) {
+                destinationLocation.value = '';
+            }
+            updateDestinationOptions();
+        });
+
+        destinationLocation.addEventListener('change', () => {
+            if (startLocation.value === destinationLocation.value) {
+                startLocation.value = '';
+            }
+            updateStartOptions();
+        });
+
+        // Initial check
+        updateDestinationOptions();
+        updateStartOptions();
+    </script>
+</body>
+</html>

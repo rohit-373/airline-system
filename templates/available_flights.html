@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Flights</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 50px; }
+        .flight-card { background-color: white; border: 1px solid #dee2e6; border-radius: 5px; margin-bottom: 20px; padding: 20px; }
+        .flight-card h5 { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Available Flights</h2>
+        {% if flights %}
+            <form action="/passenger_details" method="POST">
+                {% for flight in flights %}
+                    <div class="flight-card">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flight_id" value="{{ flight.flight_id }}" id="flight_{{ flight.flight_id }}" required>
+                            <label class="form-check-label" for="flight_{{ flight.flight_id }}">
+                                <h5>{{ flight.airline_name }} - Flight {{ flight.flight_number }}</h5>
+                            </label>
+                        </div>
+                        <p>Departure: {{ flight.departure_time }}</p>
+                        <p>Arrival: {{ flight.arrival_time }}</p>
+                    </div>
+                {% endfor %}
+                <input type="hidden" name="booking_date" value="{{ booking_date }}">
+                <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+        {% else %}
+            <p>No flights found for the selected route.</p>
+            <a href="/" class="btn btn-secondary">Try another search</a>
+        {% endif %}
+    </div>
+</body>
+</html>

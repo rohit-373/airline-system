@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Passenger Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 50px; }
+        .flight-card { background-color: white; border: 1px solid #dee2e6; border-radius: 5px; margin-bottom: 20px; padding: 20px; }
+        .flight-card h5 { font-weight: bold; }
+        .price-options { margin-top: 15px; }
+        .price-options label { margin-right: 15px; }
+        .seat-map { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin-top: 15px; }
+        .seat {
+            width: 40px; height: 40px; background-color: #cce5ff; border: 1px solid #007bff; border-radius: 5px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-weight: bold;
+        }
+        .seat.occupied { background-color: #dc3545; border-color: #dc3545; cursor: not-allowed; }
+        .seat.selected { background-color: #28a745; border-color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/payment" method="POST">
+            <h2>Passenger Details</h2>
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="middle_name">Middle Name</label>
+                <input type="text" id="middle_name" name="middle_name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="dob" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Numbers</label>
+                <div id="phone-numbers-container">
+                    <div class="input-group mb-2">
+                        <input type="tel" name="phone_numbers[]" class="form-control" required>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="addPhoneNumber()">Add Another Phone Number</button>
+            </div>
+
+            <h2 class="mt-5">Your Selected Flight</h2>
+            <div class="flight-card">
+                <h5>{{ flight.airline_name }} - Flight {{ flight.flight_number }}</h5>
+                <p>Departure: {{ flight.departure_time }}</p>
+                <p>Arrival: {{ flight.arrival_time }}</p>
+
+                <input type="hidden" name="flight_id" value="{{ flight.flight_id }}">
+                <input type="hidden" name="booking_date" value="{{ booking_date }}">
+                <input type="hidden" name="seat_number" id="seat_number" value="">
+
+                <div class="price-options">
+                    <label><input type="radio" name="class" value="Economy" required> Economy: ₹{{ flight.price_economy }}</label>
+                    <label><input type="radio" name="class" value="Business"> Business: ₹{{ flight.price_business }}</label>
+                    <label><input type="radio" name="class" value="First"> First: ₹{{ flight.price_first }}</label>
+                </div>
+
+                <h6>Select a Seat</h6>
+                <div class="seat-map">
+                    {% for i in range(1, 61) %}
+                        {% set seat_id = 'S' + i|string %}
+                        <div class="seat {% if seat_id in flight.occupied_seats %}occupied{% endif %}" data-seat-id="{{ seat_id }}">{{ seat_id }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block mt-4">Continue to Payment</button>
+        </form>
+    </div>
+
+    <script>
+        document.querySelectorAll('.seat:not(.occupied)').forEach(seat => {
+            seat.addEventListener('click', () => {
+                const seatId = seat.dataset.seatId;
+
+                // Unselect other seats and update hidden input
+                document.querySelectorAll('.seat').forEach(s => s.classList.remove('selected'));
+                document.getElementById('seat_number').value = '';
+
+                // Select the clicked seat and update hidden input
+                seat.classList.add('selected');
+                document.getElementById('seat_number').value = seatId;
+            });
+        });
+
+        function addPhoneNumber() {
+            const container = document.getElementById('phone-numbers-container');
+            const newPhoneInput = document.createElement('div');
+            newPhoneInput.classList.add('input-group', 'mb-2');
+            newPhoneInput.innerHTML = '<input type="tel" name="phone_numbers[]" class="form-control" required>';
+            container.appendChild(newPhoneInput);
+        }
+    </script>
+</body>
+</html>
