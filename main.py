@@ -319,5 +319,4 @@ def view_airports():
     return render_template('view_airports.html', details=details)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
