@@ -170,7 +170,6 @@ def confirmation():
     seat_number = request.form['seat_number']
     selected_class = request.form['class']
     price = request.form['price']
-    payment_method = request.form['payment_method']
     payment_status = request.form['payment_status']
     booking_date = request.form['booking_date']
     passenger_id = request.form['passenger_id']
@@ -308,7 +307,7 @@ def view_airports():
             a.Country,
             a.Runways_Count,
             a.Type,
-            GROUP_CONCAT(DISTINCT acn..Contact_Numbers) AS ContactNumbers,
+            GROUP_CONCAT(DISTINCT acn.Contact_Numbers) AS ContactNumbers,
             GROUP_CONCAT(DISTINCT ap.Airline_Name) AS Airlines
         FROM Airport a
         LEFT JOIN Airport_Contact_Numbers acn ON a.Airport_ID = acn.Airport_ID
