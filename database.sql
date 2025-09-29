@@ -1,4 +1,3 @@
-
 CREATE TABLE Passenger(
     Passenger_ID INTEGER PRIMARY KEY,
     First_Name VARCHAR(255),

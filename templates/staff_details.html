@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">View Staff Details</h1>
+        <form action="/staff_details" method="post">
+            <div class="form-group">
+                <label for="staff_id">Enter Staff ID:</label>
+                <input type="text" class="form-control" id="staff_id" name="staff_id" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        {% if error %}
+            <div class="alert alert-danger mt-4">{{ error }}</div>
+        {% endif %}
+
+        {% if staff_details %}
+            <h2 class="mt-5">Staff Details</h2>
+            <table class="table table-striped table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Staff ID</th>
+                        <td>{{ staff_details['Staff_ID'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ staff_details['Name'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Role</th>
+                        <td>{{ staff_details['Role'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ staff_details['Email'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Hours</th>
+                        <td>{{ staff_details['Hours'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone Numbers</th>
+                        <td>{{ staff_details['Phone_Numbers'] | join(', ') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Languages Spoken</th>
+                        <td>{{ staff_details['Languages_Spoken'] | join(', ') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            {% if staff_details['Flight_Number'] %}
+                <h2 class="mt-4">Assigned Flight</h2>
+                <table class="table table-striped table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>Flight Number</th>
+                            <td>{{ staff_details['Flight_Number'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Airline</th>
+                            <td>{{ staff_details['Airline_Name'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Departure</th>
+                            <td>{{ staff_details['Departure_Time'] }} from {{ staff_details['Start_Location'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Arrival</th>
+                            <td>{{ staff_details['Arrival_Time'] }} at {{ staff_details['Destination_Location'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info mt-4">This staff member is not currently assigned to a flight.</div>
+            {% endif %}
+        {% endif %}
+
+        <div class="home-button-container">
+            <a href="/" class="btn btn-info">Home</a>
+        </div>
+    </div>
+</body>
+</html>

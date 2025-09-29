@@ -170,7 +170,7 @@ def confirmation():
     seat_number = request.form['seat_number']
     selected_class = request.form['class']
     price = request.form['price']
-    payment_.method = request.form['payment_method']
+    payment_method = request.form['payment_method']
     payment_status = request.form['payment_status']
     booking_date = request.form['booking_date']
     passenger_id = request.form['passenger_id']
@@ -245,9 +245,79 @@ def register_staff():
 @app.route('/view_staff')
 def view_staff():
     db = get_db()
-    cursor = db.execute("SELECT * FROM Staff")
-    staff = cursor.fetchall()
-    return render_template('view_staff.html', staff=staff)
+    cursor = db.execute("SELECT Staff_ID, Name, Role, Email, Hours FROM Staff")
+    staff_members = cursor.fetchall()
+
+    staff_list = []
+    for member in staff_members:
+        staff_member = dict(member)
+
+        phones_cursor = db.execute("SELECT Phone_Numbers FROM Staff_Phone_Numbers WHERE Staff_ID = ?", (staff_member['Staff_ID'],))
+        staff_member['PhoneNumbers'] = ', '.join([row[0] for row in phones_cursor.fetchall()])
+
+        languages_cursor = db.execute("SELECT Languages_Spoken FROM Languages_Spoken WHERE Staff_ID = ?", (staff_member['Staff_ID'],))
+        staff_member['Languages'] = ', '.join([row[0] for row in languages_cursor.fetchall()])
+
+        staff_list.append(staff_member)
+
+    return render_template('view_staff.html', staff=staff_list)
+
+@app.route('/staff_details', methods=['GET', 'POST'])
+def staff_details():
+    staff_details = None
+    error = None
+    if request.method == 'POST':
+        staff_id = request.form.get('staff_id')
+        if not staff_id or not staff_id.isdigit():
+            error = "Please enter a valid Staff ID."
+        else:
+            db = get_db()
+            cursor = db.execute('''
+                SELECT
+                    s.Staff_ID, s.Name, s.Role, s.Email, s.Hours,
+                    a.Airline_Name, a.Departure_Time, a.Arrival_Time,
+                    j.Flight_Number, j.Start_Location, j.Destination_Location
+                FROM Staff s
+                LEFT JOIN Airplane a ON s.Airplane_ID = a.Airplane_ID
+                LEFT JOIN Journey j ON a.Airplane_ID = j.Airplane_ID
+                WHERE s.Staff_ID = ?
+            ''', (staff_id,))
+            staff_main_details = cursor.fetchone()
+
+            if staff_main_details is None:
+                error = "Staff ID not found."
+            else:
+                staff_details = dict(staff_main_details)
+                
+                phones_cursor = db.execute("SELECT Phone_Numbers FROM Staff_Phone_Numbers WHERE Staff_ID = ?", (staff_id,))
+                staff_details['Phone_Numbers'] = [row['Phone_Numbers'] for row in phones_cursor.fetchall()]
+                
+                languages_cursor = db.execute("SELECT Languages_Spoken FROM Languages_Spoken WHERE Staff_ID = ?", (staff_id,))
+                staff_details['Languages_Spoken'] = [row['Languages_Spoken'] for row in languages_cursor.fetchall()]
+
+    return render_template('staff_details.html', staff_details=staff_details, error=error)
+
+@app.route('/view_airports')
+def view_airports():
+    db = get_db()
+    cursor = db.execute('''
+        SELECT
+            a.Name AS AirportName,
+            a.Code,
+            a.City,
+            a.Country,
+            a.Runways_Count,
+            a.Type,
+            GROUP_CONCAT(DISTINCT acn..Contact_Numbers) AS ContactNumbers,
+            GROUP_CONCAT(DISTINCT ap.Airline_Name) AS Airlines
+        FROM Airport a
+        LEFT JOIN Airport_Contact_Numbers acn ON a.Airport_ID = acn.Airport_ID
+        LEFT JOIN Operates o ON a.Airport_ID = o.Airport_ID
+        LEFT JOIN Airplane ap ON o.Airplane_ID = ap.Airplane_ID
+        GROUP BY a.Airport_ID
+    ''')
+    details = cursor.fetchall()
+    return render_template('view_airports.html', details=details)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))

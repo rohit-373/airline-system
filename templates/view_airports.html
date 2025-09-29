@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Airports</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Airport Details</h1>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Airport Name</th>
+                    <th>Code</th>
+                    <th>City</th>
+                    <th>Country</th>
+                    <th>Runways</th>
+                    <th>Type</th>
+                    <th>Contact Numbers</th>
+                    <th>Airlines</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in details %}
+                <tr>
+                    <td>{{ item['AirportName'] }}</td>
+                    <td>{{ item['Code'] }}</td>
+                    <td>{{ item['City'] }}</td>
+                    <td>{{ item['Country'] }}</td>
+                    <td>{{ item['Runways_Count'] }}</td>
+                    <td>{{ item['Type'] }}</td>
+                    <td>{{ item['ContactNumbers'] }}</td>
+                    <td>{{ item['Airlines'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="home-button-container">
+            <a href="/" class="btn btn-info">Home</a>
+        </div>
+    </div>
+</body>
+</html>
